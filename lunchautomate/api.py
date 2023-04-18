@@ -9,6 +9,7 @@ from .auth import GlobalAuth
 from .types import Request
 from .custom_lunches import Lunches
 from datetime import datetime, timedelta
+import time
 
 
 class ORJSONRenderer(BaseRenderer):
@@ -41,8 +42,8 @@ def me(request: Request):
 
 
 @api.get("/lunches")
-def lunches(request: Request, date: str = ""):
-    lunches = Lunches(request.auth).get_lunch(datetime.now() + timedelta(days=1))
+def lunches(request: Request, date: float = time.time()):
+    lunches = Lunches(request.auth).get_lunch(datetime.fromtimestamp(date))
     if not isinstance(lunches, Lunch):
         return {"menus": {}}
     return {"menus": lunches.menus}
