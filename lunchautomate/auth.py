@@ -8,9 +8,10 @@ class GlobalAuth(HttpBearer):
         edupage = Edupage()
         try:
             username = request.GET["username"]
+            subdomain = request.GET["subdomain"]
             if len(username) == 0:
                 raise
-            Login(edupage).reload_data("spsezoska", token, username)
+            Login(edupage).reload_data(subdomain, token, username)
             return edupage
         except:
             pass

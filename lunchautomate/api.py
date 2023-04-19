@@ -1,12 +1,13 @@
 import orjson
 from django.http import HttpRequest, HttpResponse
+from django.contrib.auth.models import User
 from ninja import NinjaAPI, Form
 from ninja.renderers import BaseRenderer
 from edupage_api import Edupage, Lunch
-from typing import Literal
 from datetime import datetime
 import time
 
+from .models import EdupageUser
 from .schemas import UserIn
 from .auth import GlobalAuth
 from .types import Request
@@ -67,3 +68,32 @@ def choose_lunch(request: Request, date: float = time.time(), number: int = 1):
         )
     else:
         lunches.choose(request.auth, number)
+
+
+@api.post("/add_lunch_cron", auth=None)
+def add_lunch_cron(request, data: UserIn):
+    try:
+        edupage = Edupage()
+        edupage.login(data.username, data.password, data.subdomain)
+        user = EdupageUser(
+            username=data.username, password=data.password, subdomain=data.subdomain
+        )
+        user.save()
+    except Exception as e:
+        print(e)
+        return api.create_response(
+            request, {"message": "Incorrect credentials"}, status=401
+        )
+
+
+@api.post("/remove_lunch_cron", auth=None)
+def remove_lunch_cron(request, data: UserIn):
+    try:
+        edupage = Edupage()
+        edupage.login(data.username, data.password, data.subdomain)
+        user = EdupageUser.objects.get(username=data.username, subdomain=data.subdomain)
+        user.delete()
+    except:
+        return api.create_response(
+            request, {"message": "Incorrect credentials"}, status=401
+        )
