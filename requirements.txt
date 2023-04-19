@@ -6,7 +6,7 @@ charset-normalizer==3.1.0
 click==8.1.3
 Django==4.2
 django-ninja==0.21.0
-edupage-api==0.10.4
+edupage-api @ git+https://github.com/ivanhrabcak/edupage-api.git@1359db50b76cfeb03d393fdfcaa7c489871fb1e8
 idna==3.4
 mypy-extensions==1.0.0
 orjson==3.8.10

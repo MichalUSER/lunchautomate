@@ -7,8 +7,8 @@ from edupage_api import Edupage, Lunch
 from .schemas import UserIn
 from .auth import GlobalAuth
 from .types import Request
-from .custom_lunches import Lunches
-from datetime import datetime, timedelta
+
+from datetime import datetime
 import time
 
 
@@ -43,7 +43,7 @@ def me(request: Request):
 
 @api.get("/lunches")
 def lunches(request: Request, date: float = time.time()):
-    lunches = Lunches(request.auth).get_lunch(datetime.fromtimestamp(date))
+    lunches = request.auth.get_lunches(datetime.fromtimestamp(date))
     if not isinstance(lunches, Lunch):
         return {"menus": {}}
     return {"menus": lunches.menus}
