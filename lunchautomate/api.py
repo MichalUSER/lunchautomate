@@ -12,7 +12,6 @@ from .auth import GlobalAuth
 from .types import Request
 
 
-
 class ORJSONRenderer(BaseRenderer):
     media_type = "application/json"
 
@@ -49,12 +48,19 @@ def lunches(request: Request, date: float = time.time()):
         return {"menus": {}}
     return {"menus": lunches.menus}
 
+
 @api.get("/choose_lunch")
 def choose_lunch(request: Request, date: float = time.time(), number: int = 1):
     lunches = request.auth.get_lunches(datetime.fromtimestamp(date))
+    if lunches is None:
+        return api.create_response(
+            request, {"message": "Error when fetching lunches"}, status=500
+        )
     if number == 0:
         lunches.sign_off(request.auth)
-    elif number > 3:
-        return api.create_response(request, {"message": "Invalid lunch number"}, status=403)
+    elif number > 8:
+        return api.create_response(
+            request, {"message": "Invalid lunch number"}, status=403
+        )
     else:
         lunches.choose(request.auth, number)
