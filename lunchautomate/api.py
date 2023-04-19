@@ -43,10 +43,13 @@ def me(request: Request):
 
 @api.get("/lunches")
 def lunches(request: Request, date: float = time.time()):
-    lunches = request.auth.get_lunches(datetime.fromtimestamp(date))
-    if not isinstance(lunches, Lunch):
+    try:
+        lunches = request.auth.get_lunches(datetime.fromtimestamp(date))
+        if not isinstance(lunches, Lunch):
+            return {"menus": {}}
+        return {"menus": lunches.menus}
+    except:
         return {"menus": {}}
-    return {"menus": lunches.menus}
 
 
 @api.get("/choose_lunch")
