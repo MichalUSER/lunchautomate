@@ -3,9 +3,10 @@ from .models import EdupageUser
 
 
 class LunchCronJob(CronJobBase):
-    RUN_EVERY_MINS = 1
+    RUN_WEEKLY_ON_DAYS = [6]
+    RUN_AT_TIMES = ["12:00"]
 
-    schedule = Schedule(run_every_mins=RUN_EVERY_MINS)
+    schedule = Schedule(run_on_days=RUN_WEEKLY_ON_DAYS, run_at_times=RUN_AT_TIMES)
     code = "lunchautomate.lunch_cron_job"
 
     def do(self):
