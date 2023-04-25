@@ -1,7 +1,7 @@
 import orjson
 from django.http import HttpRequest, HttpResponse
 from django.contrib.auth.models import User
-from ninja import NinjaAPI, Form
+from ninja import NinjaAPI
 from ninja.renderers import BaseRenderer
 from edupage_api import Edupage, Lunch
 from datetime import datetime
@@ -24,17 +24,20 @@ api = NinjaAPI(auth=GlobalAuth(), renderer=ORJSONRenderer())
 
 
 @api.post("/authenticate", auth=None)
-def authenticate(
-    request: HttpRequest, response: HttpResponse, data: UserIn = Form(...)
-):
-    edupage = Edupage()
-    edupage.login(data.username, data.password, "spsezoska")
-    # response.set_cookie("username", data.username)
-    # response.set_cookie("PHPSESSID", edupage.session.cookies.get(name="PHPSESSID"))
-    return {
-        "username": data.username,
-        "token": edupage.session.cookies.get(name="PHPSESSID"),
-    }
+def authenticate(request: HttpRequest, response: HttpResponse, data: UserIn):
+    try:
+        edupage = Edupage()
+        edupage.login(data.username, data.password, data.subdomain)
+        response.set_cookie(key="username", value=data.username)
+        response.set_cookie(
+            key="PHPSESSID",
+            value=edupage.session.cookies.get(name="PHPSESSID"),
+        )
+        response.set_cookie(key="subdomain", value=data.subdomain)
+    except Exception:
+        return api.create_response(
+            request, {"message": "Invalid credentials"}, status=401
+        )
 
 
 @api.get("/me")
@@ -79,10 +82,9 @@ def add_lunch_cron(request, data: UserIn):
             username=data.username, password=data.password, subdomain=data.subdomain
         )
         user.save()
-    except Exception as e:
-        print(e)
+    except Exception:
         return api.create_response(
-            request, {"message": "Incorrect credentials"}, status=401
+            request, {"message": "Invalid credentials"}, status=401
         )
 
 
@@ -95,5 +97,5 @@ def remove_lunch_cron(request, data: UserIn):
         user.delete()
     except:
         return api.create_response(
-            request, {"message": "Incorrect credentials"}, status=401
+            request, {"message": "Invalid credentials"}, status=401
         )
