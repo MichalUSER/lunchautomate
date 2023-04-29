@@ -1,3 +1,3 @@
-# Example crontab script - run every hour
+# Example crontab script - run at 12:00 on Saturday
 
-0 * * * * /path-to/venv/bin/python /path-to/lunchautomate/manage.py runcrons > /path-to/cronjob.log 2>&1
+0 12 * * 6 /path-to/venv/bin/python /path-to/lunchautomate/manage.py runcrons > /path-to/cronjob.log 2>&1

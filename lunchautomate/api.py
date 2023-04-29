@@ -1,6 +1,5 @@
 import orjson
 from django.http import HttpRequest, HttpResponse
-from django.contrib.auth.models import User
 from ninja import NinjaAPI
 from ninja.renderers import BaseRenderer
 from edupage_api import Edupage, Lunch
@@ -58,7 +57,12 @@ def lunches(request: Request, date: float = time.time()):
 
 @api.get("/choose_lunch")
 def choose_lunch(request: Request, date: float = time.time(), number: int = 1):
-    lunches = request.auth.get_lunches(datetime.fromtimestamp(date))
+    try:
+        lunches = request.auth.get_lunches(datetime.fromtimestamp(date))
+    except:
+        return api.create_response(
+            request, {"message": "Lunch is not served on that date"}, status=500
+        )
     if lunches is None:
         return api.create_response(
             request, {"message": "Error when fetching lunches"}, status=500
