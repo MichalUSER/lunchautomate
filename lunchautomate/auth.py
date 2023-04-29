@@ -7,9 +7,9 @@ class GlobalAuth(HttpBearer):
     def authenticate(self, request: HttpRequest, token):
         edupage = Edupage()
         try:
-            username = request.GET["username"]
-            subdomain = request.GET["subdomain"]
-            if len(username) == 0:
+            username = request.COOKIES["username"]
+            subdomain = request.COOKIES["subdomain"]
+            if len(username) == 0 or len(subdomain) == 0:
                 raise
             Login(edupage).reload_data(subdomain, token, username)
             return edupage
