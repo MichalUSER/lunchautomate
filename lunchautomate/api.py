@@ -1,15 +1,15 @@
 import orjson
+import time
 from django.http import HttpRequest, HttpResponse
 from ninja import NinjaAPI
 from ninja.renderers import BaseRenderer
 from edupage_api import Edupage, Lunch
 from datetime import datetime
-import time
 
 from .models import EdupageUser
 from .schemas import UserIn
 from .auth import GlobalAuth
-from .types import Request
+from .utils import Request, set_cookie
 
 
 class ORJSONRenderer(BaseRenderer):
@@ -27,21 +27,17 @@ def authenticate(request: HttpRequest, response: HttpResponse, data: UserIn):
     try:
         edupage = Edupage()
         edupage.login(data.username, data.password, data.subdomain)
-        response.set_cookie(key="username", value=data.username)
-        response.set_cookie(
-            key="PHPSESSID",
-            value=edupage.session.cookies.get(name="PHPSESSID"),
+        set_cookie(response, "username", data.username)
+        set_cookie(
+            response,
+            "sessionId",
+            edupage.session.cookies.get(name="PHPSESSID"),
         )
-        response.set_cookie(key="subdomain", value=data.subdomain)
+        set_cookie(response, "subdomain", data.subdomain)
     except Exception:
         return api.create_response(
             request, {"message": "Invalid credentials"}, status=401
         )
-
-
-@api.get("/me")
-def me(request: Request):
-    return {"PHPSESSID": request.auth.session.cookies["PHPSESSID"]}
 
 
 @api.get("/lunches")
@@ -77,13 +73,23 @@ def choose_lunch(request: Request, date: float = time.time(), number: int = 1):
         lunches.choose(request.auth, number)
 
 
+@api.get("/my_status")
+def my_status(request: Request):
+    exists = EdupageUser.objects.filter(
+        username=request.auth.username, subdomain=request.auth.subdomain
+    ).exists()
+    return {"exists": exists}
+
+
 @api.post("/add_lunch_cron", auth=None)
 def add_lunch_cron(request, data: UserIn):
     try:
         edupage = Edupage()
         edupage.login(data.username, data.password, data.subdomain)
         user = EdupageUser(
-            username=data.username, password=data.password, subdomain=data.subdomain
+            username=data.username.lower(),
+            password=data.password,
+            subdomain=data.subdomain.lower(),
         )
         user.save()
     except Exception:
