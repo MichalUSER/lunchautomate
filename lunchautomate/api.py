@@ -9,7 +9,7 @@ from datetime import datetime
 from .models import EdupageUser
 from .schemas import UserIn
 from .auth import GlobalAuth
-from .utils import Request, set_cookie
+from .utils import Request
 
 
 class ORJSONRenderer(BaseRenderer):
@@ -27,13 +27,13 @@ def authenticate(request: HttpRequest, response: HttpResponse, data: UserIn):
     try:
         edupage = Edupage()
         edupage.login(data.username, data.password, data.subdomain)
-        set_cookie(response, "username", data.username)
-        set_cookie(
-            response,
-            "sessionId",
-            edupage.session.cookies.get(name="PHPSESSID"),
-        )
-        set_cookie(response, "subdomain", data.subdomain)
+        username = {"key": "username", "value": data.username}
+        sessionId = {
+            "key": "sessionId",
+            "value": edupage.session.cookies.get(name="PHPSESSID"),
+        }
+        subdomain = {"key": "subdomain", "value": data.subdomain}
+        return {"cookies": [username, sessionId, subdomain]}
     except Exception:
         return api.create_response(
             request, {"message": "Invalid credentials"}, status=401
