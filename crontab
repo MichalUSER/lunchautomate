@@ -1,0 +1,5 @@
+# Crontab file for supercronic
+
+# Run every hour
+
+0 * * * * python manage.py runcrons
