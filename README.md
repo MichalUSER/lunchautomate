@@ -1,8 +1,10 @@
-# Lunchautomate
+# Lunchautomate server
 
 Automate ordering lunches on edupage.
 
 Built using python and django.
+
+The web application lives [here](https://github.com/MichalUSER/lunchautomate-web)
 
 ## Developing
 
