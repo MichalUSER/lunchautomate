@@ -5,3 +5,4 @@ django-ninja==0.21.0
 edupage-api @ git+https://github.com/ivanhrabcak/edupage-api.git@1359db50b76cfeb03d393fdfcaa7c489871fb1e8
 orjson==3.8.10
 django-cors-headers==3.14.0
+django-environ==0.10.0
