@@ -1,4 +1,4 @@
-# Lunchautomate server
+# Lunchautomate API
 
 Automate ordering lunches on edupage.
 
@@ -8,10 +8,16 @@ The web application lives [here](https://github.com/MichalUSER/lunchautomate-web
 
 ## Developing
 
-Install dependencies, optionally in a python virtual environment
+Install dependencies using [poetry](https://python-poetry.org)
 
 ```
-pip install -r requirements.txt
+poetry install
+```
+
+Activate venv
+
+```
+poetry shell
 ```
 
 Run migrate commands
@@ -21,7 +27,7 @@ python manage.py migrate
 python manage.py makemigrations
 ```
 
-Create database tables
+Create database tables (currently required)
 
 ```
 python manage.py migrate --run-syncdb
@@ -33,4 +39,4 @@ Run dev server
 python manage.py runserver
 ```
 
-Open http://127.0.0.1:8000 in your browser.
+Open http://localhost:8000 in your browser.
