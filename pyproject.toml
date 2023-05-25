@@ -1,0 +1,23 @@
+[tool.poetry]
+name = "lunchautomate-api"
+version = "0.1.0"
+description = ""
+authors = ["MichalUSER"]
+readme = "README.md"
+# packages = [{include = "lunchautomate_api"}]
+
+[tool.poetry.dependencies]
+python = "^3.11"
+black = "^23.3.0"
+django = "^4.2.1"
+django-cron = "^0.6.0"
+django-ninja = "^0.21.0"
+orjson = "^3.8.13"
+django-cors-headers = "^4.0.0"
+django-environ = "^0.10.0"
+edupage-api = {git = "https://github.com/ivanhrabcak/edupage-api.git"}
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
