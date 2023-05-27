@@ -16,6 +16,9 @@ console_command = "/code/manage.py shell"
 [processes]
   cron = "supercronic /code/crontab"
 
+[[services]]
+  processes = ["web"]
+
 [http_service]
   internal_port = 8000
   force_https = true
