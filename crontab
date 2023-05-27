@@ -2,4 +2,4 @@
 
 # Run every hour
 
-0 * * * * python manage.py runcrons
+@hourly python manage.py runcrons
