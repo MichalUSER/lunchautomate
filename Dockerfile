@@ -15,6 +15,8 @@ RUN mkdir -p /code
 
 WORKDIR /code
 
+RUN apt-get -y update; apt-get -y install curl
+
 RUN curl -fsSLO "$SUPERCRONIC_URL" \
  && echo "${SUPERCRONIC_SHA1SUM}  ${SUPERCRONIC}" | sha1sum -c - \
  && chmod +x "$SUPERCRONIC" \
