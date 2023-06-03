@@ -8,9 +8,6 @@ console_command = "/code/manage.py shell"
 kill_signal = "SIGINT"
 kill_timeout = 5
 
-[deploy]
-  release_command = "python manage.py migrate"
-
 [env]
   PORT = "8000"
 
