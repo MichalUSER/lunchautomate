@@ -29,7 +29,6 @@ RUN poetry config virtualenvs.create false
 RUN poetry install --only main --no-root --no-interaction
 COPY . /code
 
-# Collect static files
 RUN python manage.py collectstatic --noinput
 
 EXPOSE 8000
