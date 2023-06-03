@@ -29,6 +29,9 @@ RUN poetry config virtualenvs.create false
 RUN poetry install --only main --no-root --no-interaction
 COPY . /code
 
+# Collect static files
+RUN python manage.py collectstatic --noinput
+
 EXPOSE 8000
 
-CMD ["sh", "./entrypoint.sh"]
+CMD ["gunicorn", "--bind", ":8000", "--workers", "2", "lunchautomate.wsgi"]
