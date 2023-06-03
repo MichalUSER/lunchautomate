@@ -647,7 +647,21 @@ secure = ["certifi", "cryptography (>=1.9)", "idna (>=2.0.0)", "pyopenssl (>=17.
 socks = ["pysocks (>=1.5.6,!=1.5.7,<2.0)"]
 zstd = ["zstandard (>=0.18.0)"]
 
+[[package]]
+name = "whitenoise"
+version = "6.4.0"
+description = "Radically simplified static file serving for WSGI applications"
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "whitenoise-6.4.0-py3-none-any.whl", hash = "sha256:599dc6ca57e48929dfeffb2e8e187879bfe2aed0d49ca419577005b7f2cc930b"},
+    {file = "whitenoise-6.4.0.tar.gz", hash = "sha256:a02d6660ad161ff17e3042653c8e3f5ecbb2a2481a006bde125b9efb9a30113a"},
+]
+
+[package.extras]
+brotli = ["Brotli"]
+
 [metadata]
 lock-version = "2.0"
 python-versions = "^3.11"
-content-hash = "ef414af890b1a15660a5dd78c30a148da94dac5a680de68c04c0c8f0b8fc10f7"
+content-hash = "dac0f40bb61816303b7acdd9cc8ddd15c3643ee8ed14353dd8eb52eff50f57a4"
