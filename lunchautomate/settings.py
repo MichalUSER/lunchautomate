@@ -16,7 +16,11 @@ import environ
 import dj_database_url
 from django.core.management.utils import get_random_secret_key
 
-env = environ.Env()
+env = environ.Env(
+    SECRET_KEY=(str, get_random_secret_key()),
+    DEBUG=(bool, False),
+    CSRF_TRUSTED_ORIGIN=(str, "http://localhost"),
+)
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 # BASE_DIR = Path(__file__).resolve().parent.parent
@@ -32,11 +36,11 @@ environ.Env.read_env(os.path.join(BASE_DIR, ".env"))
 SECRET_KEY = env("SECRET_KEY", default=get_random_secret_key())
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = env("DEBUG", cast=bool, default=False)
+DEBUG = env("DEBUG")
 
 ALLOWED_HOSTS = ["*"]
 
-CSRF_TRUSTED_ORIGINS = [env("DJANGO_TRUSTED_ORIGIN", default="http://localhost")]
+CSRF_TRUSTED_ORIGINS = [env("DJANGO_TRUSTED_ORIGIN")]
 
 
 # Application definition
