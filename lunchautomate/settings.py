@@ -36,7 +36,7 @@ DEBUG = env("DEBUG", cast=bool, default=False)
 
 ALLOWED_HOSTS = ["*"]
 
-CSRF_TRUSTED_ORIGINS = [env("DJANGO_TRUSTED_ORIGIN")]
+CSRF_TRUSTED_ORIGINS = [env("DJANGO_TRUSTED_ORIGIN", default="http://localhost")]
 
 
 # Application definition

@@ -1,4 +1,4 @@
-ARG PYTHON_VERSION=3.11-slim-buster
+ARG PYTHON_VERSION=3.11.3-alpine
 
 FROM python:${PYTHON_VERSION}
 
@@ -15,7 +15,7 @@ RUN mkdir -p /code
 
 WORKDIR /code
 
-RUN apt-get -y update; apt-get -y install curl
+RUN apk update; apk add curl
 
 RUN curl -fsSLO "$SUPERCRONIC_URL" \
  && echo "${SUPERCRONIC_SHA1SUM}  ${SUPERCRONIC}" | sha1sum -c - \
