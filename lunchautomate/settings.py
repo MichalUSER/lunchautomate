@@ -20,6 +20,7 @@ env = environ.Env(
     SECRET_KEY=(str, get_random_secret_key()),
     DEBUG=(bool, False),
     DJANGO_TRUSTED_ORIGIN=(str, "http://localhost"),
+    POSTGRES_PORT=(str, "5432"),
 )
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -98,7 +99,16 @@ WSGI_APPLICATION = "lunchautomate.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-DATABASES = {"default": dj_database_url.config()}
+DATABASES = {
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": env("POSTGRES_DB"),
+        "USER": env("POSTGRES_USER"),
+        "PASSWORD": env("POSTGRES_PASSWORD"),
+        "HOST": env("POSTGRES_HOST"),
+        "PORT": env("POSTGRES_PORT"),
+    }
+}
 
 
 # Password validation
