@@ -9,7 +9,7 @@ from datetime import datetime
 from .models import EdupageUser
 from .schemas import UserIn
 from .auth import GlobalAuth
-from .utils import Request
+from .utils import Request, encrypt, decrypt
 
 
 class ORJSONRenderer(BaseRenderer):
@@ -86,13 +86,14 @@ def add_lunch_cron(request, data: UserIn):
     try:
         edupage = Edupage()
         edupage.login(data.username, data.password, data.subdomain)
+        encrypted = encrypt(data.password.lower())
         user = EdupageUser(
             username=data.username.lower(),
-            password=data.password,
+            password=encrypted,
             subdomain=data.subdomain.lower(),
         )
         user.save()
-    except Exception:
+    except Exception as e:
         return api.create_response(
             request, {"message": "Invalid credentials"}, status=401
         )

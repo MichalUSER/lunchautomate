@@ -4,6 +4,7 @@ from django_cron import CronJobBase, Schedule
 from edupage_api import Edupage
 from .models import EdupageUser
 from .lunch import Lunch, get_boarder_id
+from .utils import decrypt
 
 
 def getDay(date: datetime, day: int) -> datetime:
@@ -13,7 +14,7 @@ def getDay(date: datetime, day: int) -> datetime:
 def order_week(user: EdupageUser):
     date = getDay(datetime.now(), 0)
     edupage = Edupage()
-    edupage.login(user.username, user.password, user.subdomain)
+    edupage.login(user.username, decrypt(user.password), user.subdomain)
     boarder_id = get_boarder_id(edupage, date)
     lunch = Lunch(edupage, boarder_id)
 

@@ -15,9 +15,11 @@ import os
 import environ
 import dj_database_url
 from django.core.management.utils import get_random_secret_key
+from cryptography.fernet import Fernet
 
 env = environ.Env(
     SECRET_KEY=(str, get_random_secret_key()),
+    ENCRYPT_KEY=(str, Fernet.generate_key()),
     DEBUG=(bool, False),
     DJANGO_TRUSTED_ORIGIN=(str, "http://localhost"),
 )
@@ -33,7 +35,9 @@ environ.Env.read_env(os.path.join(BASE_DIR, ".env"))
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/4.2/howto/deployment/checklist/
 
-SECRET_KEY = env("SECRET_KEY", default=get_random_secret_key())
+SECRET_KEY = env("SECRET_KEY")
+
+ENCRYPT_KEY = str.encode(env("ENCRYPT_KEY"))
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = env("DEBUG")
