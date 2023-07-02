@@ -8,6 +8,14 @@ The web application lives [here](https://github.com/MichalUSER/lunchautomate-web
 
 ## Developing
 
+Set up env variables
+
+```
+cp .env.dev .env
+```
+
+Fill out variables in `.env` file
+
 Install dependencies using [poetry](https://python-poetry.org)
 
 ```
